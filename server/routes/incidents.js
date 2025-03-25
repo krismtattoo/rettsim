@@ -1,12 +1,14 @@
 const express = require('express');
 const router = express.Router();
-const Incident = require('../models/Incident');
+const prisma = require('../prisma');
 
 // Alle Vorfälle abrufen
 router.get('/', async (req, res) => {
   try {
-    const incidents = await Incident.findAll({
-      order: [['timestamp', 'DESC']]
+    const incidents = await prisma.incident.findMany({
+      orderBy: {
+        createdAt: 'desc'
+      }
     });
     res.json(incidents);
   } catch (error) {
@@ -17,7 +19,9 @@ router.get('/', async (req, res) => {
 // Neuen Vorfall erstellen
 router.post('/', async (req, res) => {
   try {
-    const incident = await Incident.create(req.body);
+    const incident = await prisma.incident.create({
+      data: req.body
+    });
     res.status(201).json(incident);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -27,13 +31,11 @@ router.post('/', async (req, res) => {
 // Vorfall aktualisieren
 router.put('/:id', async (req, res) => {
   try {
-    const incident = await Incident.findByPk(req.params.id);
-    if (incident) {
-      await incident.update(req.body);
-      res.json(incident);
-    } else {
-      res.status(404).json({ message: 'Vorfall nicht gefunden' });
-    }
+    const incident = await prisma.incident.update({
+      where: { id: parseInt(req.params.id) },
+      data: req.body
+    });
+    res.json(incident);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -42,13 +44,10 @@ router.put('/:id', async (req, res) => {
 // Vorfall löschen
 router.delete('/:id', async (req, res) => {
   try {
-    const incident = await Incident.findByPk(req.params.id);
-    if (incident) {
-      await incident.destroy();
-      res.json({ message: 'Vorfall gelöscht' });
-    } else {
-      res.status(404).json({ message: 'Vorfall nicht gefunden' });
-    }
+    await prisma.incident.delete({
+      where: { id: parseInt(req.params.id) }
+    });
+    res.json({ message: 'Vorfall gelöscht' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

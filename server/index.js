@@ -9,8 +9,8 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Datenbankverbindung
-const sequelize = require('./config/database');
+// Prisma Client
+const prisma = require('./prisma');
 
 // Routen
 app.use('/api/resources', require('./routes/resources'));
@@ -29,14 +29,7 @@ if (process.env.NODE_ENV === 'production') {
 
 const PORT = process.env.PORT || 5000;
 
-// Datenbank synchronisieren und Server starten
-sequelize.sync()
-  .then(() => {
-    console.log('Datenbank synchronisiert');
-    app.listen(PORT, () => {
-      console.log(`Server läuft auf Port ${PORT}`);
-    });
-  })
-  .catch(err => {
-    console.error('Fehler beim Synchronisieren der Datenbank:', err);
-  }); 
+// Server starten
+app.listen(PORT, () => {
+  console.log(`Server läuft auf Port ${PORT}`);
+}); 

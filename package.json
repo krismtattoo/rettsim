@@ -10,17 +10,17 @@
     "dev:full": "concurrently \"npm run dev\" \"npm run client\"",
     "build": "cd client && npm run build",
     "install-client": "cd client && npm install",
-    "heroku-postbuild": "npm run install-client && npm run build"
+    "postinstall": "prisma generate"
   },
   "dependencies": {
+    "@prisma/client": "^5.10.0",
     "cors": "^2.8.5",
     "dotenv": "^16.0.3",
-    "express": "^4.18.2",
-    "mysql2": "^3.2.0",
-    "sequelize": "^6.31.0"
+    "express": "^4.18.2"
   },
   "devDependencies": {
     "concurrently": "^8.0.1",
-    "nodemon": "^2.0.22"
+    "nodemon": "^2.0.22",
+    "prisma": "^5.10.0"
   }
 }

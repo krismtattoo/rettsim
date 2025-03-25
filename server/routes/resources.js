@@ -1,11 +1,11 @@
 const express = require('express');
 const router = express.Router();
-const Resource = require('../models/Resource');
+const prisma = require('../prisma');
 
 // Alle Ressourcen abrufen
 router.get('/', async (req, res) => {
   try {
-    const resources = await Resource.findAll();
+    const resources = await prisma.resource.findMany();
     res.json(resources);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -15,7 +15,9 @@ router.get('/', async (req, res) => {
 // Neue Ressource erstellen
 router.post('/', async (req, res) => {
   try {
-    const resource = await Resource.create(req.body);
+    const resource = await prisma.resource.create({
+      data: req.body
+    });
     res.status(201).json(resource);
   } catch (error) {
     res.status(400).json({ message: error.message });
@@ -25,13 +27,11 @@ router.post('/', async (req, res) => {
 // Ressource aktualisieren
 router.put('/:id', async (req, res) => {
   try {
-    const resource = await Resource.findByPk(req.params.id);
-    if (resource) {
-      await resource.update(req.body);
-      res.json(resource);
-    } else {
-      res.status(404).json({ message: 'Ressource nicht gefunden' });
-    }
+    const resource = await prisma.resource.update({
+      where: { id: parseInt(req.params.id) },
+      data: req.body
+    });
+    res.json(resource);
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
@@ -40,13 +40,10 @@ router.put('/:id', async (req, res) => {
 // Ressource löschen
 router.delete('/:id', async (req, res) => {
   try {
-    const resource = await Resource.findByPk(req.params.id);
-    if (resource) {
-      await resource.destroy();
-      res.json({ message: 'Ressource gelöscht' });
-    } else {
-      res.status(404).json({ message: 'Ressource nicht gefunden' });
-    }
+    await prisma.resource.delete({
+      where: { id: parseInt(req.params.id) }
+    });
+    res.json({ message: 'Ressource gelöscht' });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
