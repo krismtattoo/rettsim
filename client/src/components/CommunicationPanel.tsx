@@ -1,22 +1,13 @@
 import React, { useState } from 'react';
 import {
   Box,
-  Paper,
   Typography,
   TextField,
   IconButton,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemAvatar,
-  Avatar,
-  Divider,
-  Tooltip,
   styled,
 } from '@mui/material';
 import {
   Send as SendIcon,
-  Chat as ChatIcon,
 } from '@mui/icons-material';
 
 const Container = styled(Box)({
