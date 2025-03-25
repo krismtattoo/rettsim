@@ -62,4 +62,4 @@ MIT
 
 ## Deployment
 Die Anwendung wird automatisch auf Hostinger deployed, wenn Änderungen in den main-Branch gepusht werden.
-Deployment-Konfiguration: Öffentliches Repository für automatische Bereitstellung. 
+Deployment-Konfiguration: Neue Git-Integration mit Hostinger. 
